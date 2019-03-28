@@ -66,15 +66,15 @@ var config = {
 
     var trainTimePretty = moment(trainTime, "HH:mm")
     console.log(trainTimePretty)
-
+    var minutesTilNextTrain;
   
-    if (trainTime > currentTime) {
-        nextTrain = trainTime;
-        minutesTilNextTrain = remainder;
+    if (trainTimePretty > currentTime) {
+        nextTrain = trainTimePretty;
+        minutesTilNextTrain = trainTimePretty.diff(currentTime, 'minutes');;
     } else {
         var minutesPast = currentTime.diff(trainTimePretty, 'minutes');
         var remainder = minutesPast % frequency;
-        var minutesTilNextTrain = frequency - remainder;
+        minutesTilNextTrain = frequency - remainder;
         nextTrain = currentTime.add(minutesTilNextTrain, 'minutes');
     }
     console.log(minutesPast)
