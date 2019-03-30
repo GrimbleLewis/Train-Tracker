@@ -12,7 +12,7 @@ var config = {
   
   var database = firebase.database();
 
- 
+ // collects the info from the form on submit button click
   $("#add-train-btn").on("click", function(event) {
     event.preventDefault();
 
@@ -28,7 +28,7 @@ var config = {
        time: trainTime,
        frequency: frequency
     };
-
+    // pushes new train info from the forms to firebase 
     database.ref().push(newTrain);
 
     $("#train-name-input").val("");
@@ -39,12 +39,12 @@ var config = {
 
   
  
-
+  // collects the already stored data on firebase and pushes it onto the webpage
   database.ref().on("child_added", function(childSnapshot) {
     console.log(childSnapshot.val());
 
     
-
+  
     var trainName = childSnapshot.val().name;
     var destination = childSnapshot.val().destination;
     var trainTime = childSnapshot.val().time;
@@ -55,19 +55,16 @@ var config = {
 
     var nextTrain;
   
-    // var trainTimePretty = moment.unix(trainTime).format("X")
 
     console.log(trainName);
     console.log(destination);
     console.log(trainTime);
 
 
-    console.log(currentTime)
-
     var trainTimePretty = moment(trainTime, "HH:mm")
     console.log(trainTimePretty)
     var minutesTilNextTrain;
-  
+  // displays the time of the next train based on the frequency and the first arrival time of the train
     if (trainTimePretty > currentTime) {
         nextTrain = trainTimePretty;
         minutesTilNextTrain = trainTimePretty.diff(currentTime, 'minutes');;
@@ -84,9 +81,7 @@ var config = {
     console.log(remainder)
 
     console.log(minutesTilNextTrain)
-
-    console.log(minutesPast)
-    
+// collects information from firebase and the if/else statement to put into new table row
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destination),
@@ -95,6 +90,7 @@ var config = {
         $("<td>").text(minutesTilNextTrain)
     );
 
+// appends new row to the table body
 $("#train-table > tbody").append(newRow);
 
 }, function(errorObject) {
